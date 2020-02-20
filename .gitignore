@@ -47,3 +47,6 @@ pom.xml.asc
 .history
 
 # End of https://www.gitignore.io/api/linux,clojure,visualstudiocode
+
+# Chip-8
+*.ch8
