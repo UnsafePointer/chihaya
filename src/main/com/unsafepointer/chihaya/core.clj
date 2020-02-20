@@ -8,5 +8,5 @@
         file-exists (.exists (io/file file-path))
         file-not-directory (not (.isDirectory (io/file file-path)))]
     (if (and file-exists file-not-directory)
-      (prinln "All good!")
+      (emulator/start-emulation file-path)
       (println "Incorrect argument passed. See README.md for usage."))))
