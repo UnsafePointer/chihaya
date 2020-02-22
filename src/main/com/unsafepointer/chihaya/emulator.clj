@@ -1,5 +1,6 @@
 (ns com.unsafepointer.chihaya.emulator
-  (:require [clojure.java.io :as io])
+  (:require [clojure.java.io :as io]
+            [clojure.core.match :refer [match]])
   (:import  [org.apache.commons.io IOUtils]))
 
 (defn read-rom [file-path]
@@ -25,9 +26,10 @@
     (swap! state assoc :program-counter (+ program-counter 2)))) ; TODO: Check when to increase PC
 
 (defn execute-next-instruction [state]
-  (prn "Current instruction: " (:current-instruction @state))
-  (prn "Current program counter: " (:program-counter @state))
-  (prn "Executing next instruction"))
+  (let [instruction (:current-instruction @state)
+        [_ Vx-character Vy-character _ :as opcode] (vec (format "%04X" instruction))]
+    (match opcode
+      :else (throw (Exception. (str "Unhandled operation code: " opcode))))))
 
 (defn start-emulation [file-path]
   (let [state (create-initial-state file-path)]
