@@ -1,6 +1,7 @@
 (ns com.unsafepointer.chihaya.emulator
   (:require [clojure.java.io :as io]
-            [clojure.core.match :refer [match]])
+            [clojure.core.match :refer [match]]
+            [com.unsafepointer.chihaya.instructions :as instructions])
   (:import  [org.apache.commons.io IOUtils]))
 
 (defn read-rom [file-path]
@@ -14,7 +15,8 @@
                             (vec (repeat (- 0xFFF (count rom) 0x200) 0)))) ; 0xFFF is the end of Chip-8 RAM
         state (atom {:memory memory
                      :program-counter  0x200
-                     :current-instruction nil})]
+                     :current-instruction nil
+                     :stack ()})]
     state))
 
 (defn read-current-instruction [state]
@@ -27,8 +29,10 @@
 
 (defn execute-next-instruction [state]
   (let [instruction (:current-instruction @state)
-        [_ Vx-character Vy-character _ :as opcode] (vec (format "%04X" instruction))]
+        [_ Vx-character Vy-character _ :as opcode] (vec (format "%04X" instruction))
+        nnn (bit-and instruction 0xFFF)]
     (match opcode
+      [\1 _ _ _] (instructions/jp-addr state nnn)
       :else (throw (Exception. (str "Unhandled operation code: " opcode))))))
 
 (defn start-emulation [file-path]
