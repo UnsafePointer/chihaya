@@ -17,7 +17,8 @@
                      :program-counter  0x200
                      :current-instruction nil
                      :stack ()
-                     :registers (vec (repeat 16 0))})]
+                     :registers (vec (repeat 16 0))
+                     :address-register nil})]
     state))
 
 (defn read-current-instruction [state]
@@ -37,6 +38,7 @@
     (match opcode
       [\1 _ _ _] (instructions/jp-addr state nnn)
       [\6 _ _ _] (instructions/ld-Vx-byte state Vx kk)
+      [\A _ _ _] (instructions/ld-I-addr state nnn)
       :else (throw (Exception. (str "Unhandled operation code: " opcode))))))
 
 (defn start-emulation [file-path]

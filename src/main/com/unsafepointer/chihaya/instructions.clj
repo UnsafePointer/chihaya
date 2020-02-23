@@ -14,3 +14,9 @@
   (let [registers (:registers @state)
         updated-registers (assoc registers Vx byte)]
     (swap! state assoc :registers updated-registers)))
+
+(defn ld-I-addr
+  "Annn - LD I, addr
+  Set I = nnn."
+  [state addr]
+  (swap! state assoc :address-register addr))
