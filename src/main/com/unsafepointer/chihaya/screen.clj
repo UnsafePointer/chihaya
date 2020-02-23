@@ -1,4 +1,5 @@
-(ns com.unsafepointer.chihaya.screen)
+(ns com.unsafepointer.chihaya.screen
+  (:require [clojure.string :as string]))
 
 (defn create-empty-screen []
   (vec (take 64 (repeat (vec (repeat 32 0)))))) ; 64x32-pixel monochrome display
@@ -11,3 +12,7 @@
 (defn get-screen-pixel-value [screen x y]
   (let [row (nth screen x)]
     (nth row y)))
+
+(defn print-screen [screen]
+  (doseq [scanline screen]
+    (prn (string/join scanline))))
