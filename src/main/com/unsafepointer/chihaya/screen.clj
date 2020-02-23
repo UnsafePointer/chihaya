@@ -7,3 +7,7 @@
   (let [row (nth screen x)
         updated-row (assoc row y bit)]
     (assoc screen x updated-row)))
+
+(defn get-screen-pixel-value [screen x y]
+  (let [row (nth screen x)]
+    (nth row y)))
