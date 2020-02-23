@@ -37,11 +37,14 @@
         [_ Vx-character Vy-character _ :as opcode] (vec (format "%04X" instruction))
         nnn (bit-and instruction 0xFFF)
         Vx (Integer/parseInt (str Vx-character) 16)
-        kk (bit-and instruction 0xFF)]
+        Vy (Integer/parseInt (str Vy-character) 16)
+        kk (bit-and instruction 0xFF)
+        nibble (bit-and instruction 0xF)]
     (match opcode
       [\1 _ _ _] (instructions/jp-addr state nnn)
       [\6 _ _ _] (instructions/ld-Vx-byte state Vx kk)
       [\A _ _ _] (instructions/ld-I-addr state nnn)
+      [\D _ _ _] (instructions/drw-Vx-Vy-nibble state Vx Vy nibble)
       :else (throw (Exception. (str "Unhandled operation code: " opcode))))))
 
 (defn start-emulation [file-path]
