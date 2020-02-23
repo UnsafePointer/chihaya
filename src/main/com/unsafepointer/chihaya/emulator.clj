@@ -16,7 +16,8 @@
         state (atom {:memory memory
                      :program-counter  0x200
                      :current-instruction nil
-                     :stack ()})]
+                     :stack ()
+                     :registers (vec (repeat 16 0))})]
     state))
 
 (defn read-current-instruction [state]
@@ -30,9 +31,12 @@
 (defn execute-next-instruction [state]
   (let [instruction (:current-instruction @state)
         [_ Vx-character Vy-character _ :as opcode] (vec (format "%04X" instruction))
-        nnn (bit-and instruction 0xFFF)]
+        nnn (bit-and instruction 0xFFF)
+        Vx (Integer/parseInt (str Vx-character) 16)
+        kk (bit-and instruction 0xFF)]
     (match opcode
       [\1 _ _ _] (instructions/jp-addr state nnn)
+      [\6 _ _ _] (instructions/ld-Vx-byte state Vx kk)
       :else (throw (Exception. (str "Unhandled operation code: " opcode))))))
 
 (defn start-emulation [file-path]
