@@ -51,3 +51,13 @@
         (recur (inc memory-index))))
         (swap! state assoc :registers @updated-registers)
         (swap! state assoc :screen @updated-screen)))
+
+(defn se-Vx-byte
+  "3xkk - SE Vx, byte
+  Skip next instruction if Vx = kk."
+  [state Vx byte]
+  (let [registers (:registers @state)
+        Vx-value (nth registers Vx)
+        program-counter (:program-counter @state)]
+    (when (= Vx-value byte)
+      (swap! state assoc :program-counter (+ program-counter 2)))))
