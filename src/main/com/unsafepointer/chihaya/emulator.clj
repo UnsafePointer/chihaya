@@ -1,7 +1,8 @@
 (ns com.unsafepointer.chihaya.emulator
   (:require [clojure.java.io :as io]
             [clojure.core.match :refer [match]]
-            [com.unsafepointer.chihaya.instructions :as instructions])
+            [com.unsafepointer.chihaya.instructions :as instructions]
+            [com.unsafepointer.chihaya.screen :as screen])
   (:import  [org.apache.commons.io IOUtils]))
 
 (defn read-rom [file-path]
@@ -13,12 +14,14 @@
         memory (vec (concat (vec (repeat 0x200 0)) ; 0x000 to 0x1FF is reserved for the interpreter
                             (seq rom) ; 0x200 is the start of most Chip-8 programs
                             (vec (repeat (- 0xFFF (count rom) 0x200) 0)))) ; 0xFFF is the end of Chip-8 RAM
+        screen (screen/create-empty-screen)
         state (atom {:memory memory
                      :program-counter  0x200
                      :current-instruction nil
                      :stack ()
                      :registers (vec (repeat 16 0))
-                     :address-register nil})]
+                     :address-register nil
+                     :screen screen})]
     state))
 
 (defn read-current-instruction [state]
