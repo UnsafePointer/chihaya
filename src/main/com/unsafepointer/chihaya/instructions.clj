@@ -103,3 +103,12 @@
         program-counter (:program-counter @state)]
     (when (not= Vx-value Vy-value)
       (swap! state assoc :program-counter (+ program-counter 2)))))
+
+(defn call-addr
+  "2nnn - CALL addr
+  Call subroutine at nnn."
+  [state nnn]
+  (let [program-counter (:program-counter @state)
+        stack (:stack @state)]
+    (swap! state assoc :stack (conj stack program-counter))
+    (swap! state assoc :program-counter nnn)))

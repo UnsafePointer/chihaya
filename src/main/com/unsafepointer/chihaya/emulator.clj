@@ -42,6 +42,7 @@
         nibble (bit-and instruction 0xF)]
     (match opcode
       [\1 _ _ _] (instructions/jp-addr state nnn)
+      [\2 _ _ _] (instructions/call-addr state nnn)
       [\3 _ _ _] (instructions/se-Vx-byte state Vx kk)
       [\4 _ _ _] (instructions/sne-Vx-byte state Vx kk)
       [\5 _ _\0] (instructions/se-Vx-Vy state Vx Vy)
