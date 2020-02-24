@@ -112,3 +112,13 @@
         stack (:stack @state)]
     (swap! state assoc :stack (conj stack program-counter))
     (swap! state assoc :program-counter nnn)))
+
+(defn ret
+  "00EE - RET
+  Return from a subroutine."
+  [state]
+  (let [stack (:stack @state)
+        top (peek stack)
+        stack-updated (pop stack)]
+    (swap! state assoc :stack stack-updated)
+    (swap! state assoc :program-counter top)))

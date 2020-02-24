@@ -41,6 +41,7 @@
         kk (bit-and instruction 0xFF)
         nibble (bit-and instruction 0xF)]
     (match opcode
+      [\0\0\E\E] (instructions/ret state)
       [\1 _ _ _] (instructions/jp-addr state nnn)
       [\2 _ _ _] (instructions/call-addr state nnn)
       [\3 _ _ _] (instructions/se-Vx-byte state Vx kk)
