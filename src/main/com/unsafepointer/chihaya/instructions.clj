@@ -82,3 +82,13 @@
         program-counter (:program-counter @state)]
     (when (= Vx-value Vy-value)
       (swap! state assoc :program-counter (+ program-counter 2)))))
+
+(defn add-Vx-byte
+  "7xkk - ADD Vx, byte
+  Set Vx = Vx + kk."
+  [state Vx byte]
+  (let [registers (:registers @state)
+        Vx-value (nth registers Vx)
+        result (bit-and (+ Vx-value byte) 0xFF)
+        registers-updated (assoc registers Vx byte)]
+    (swap! state assoc :registers registers-updated)))
