@@ -92,3 +92,14 @@
         result (bit-and (+ Vx-value byte) 0xFF)
         registers-updated (assoc registers Vx byte)]
     (swap! state assoc :registers registers-updated)))
+
+(defn sne-Vx-Vy
+  "9xy0 - SNE Vx, Vy
+  Skip next instruction if Vx != Vy."
+  [state Vx Vy]
+  (let [registers (:registers @state)
+        Vx-value (nth registers Vx)
+        Vy-value (nth registers Vy)
+        program-counter (:program-counter @state)]
+    (when (not= Vx-value Vy-value)
+      (swap! state assoc :program-counter (+ program-counter 2)))))
