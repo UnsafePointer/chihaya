@@ -61,3 +61,13 @@
         program-counter (:program-counter @state)]
     (when (= Vx-value byte)
       (swap! state assoc :program-counter (+ program-counter 2)))))
+
+(defn sne-Vx-byte
+  "4xkk - SNE Vx, byte
+  Skip next instruction if Vx != kk."
+  [state Vx byte]
+  (let [registers (:registers @state)
+        Vx-value (nth registers Vx)
+        program-counter (:program-counter @state)]
+    (when (not= Vx-value byte)
+      (swap! state assoc :program-counter (+ program-counter 2)))))
