@@ -178,3 +178,17 @@
         updated-registers (atom (assoc registers Vx result))]
     (swap! updated-registers assoc 0xF carry)
     (swap! state assoc :registers @updated-registers)))
+
+(defn sub-Vx-Vy
+  "8xy5 - SUB Vx, Vy
+  Set Vx = Vx - Vy, set VF = NOT borrow."
+  [state Vx Vy]
+  (let [registers (:registers @state)
+        Vx-value (nth registers Vx)
+        Vy-value (nth registers Vy)
+        intermediate-result (- Vx-value Vy-value)
+        not-borrow (if (> Vx-value Vy-value) 0x1 0x0)
+        result (bit-and intermediate-result 0xFF)
+        updated-registers (atom (assoc registers Vx result))]
+    (swap! updated-registers assoc 0xF not-borrow)
+    (swap! state assoc :registers @updated-registers)))
