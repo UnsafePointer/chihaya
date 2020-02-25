@@ -122,3 +122,12 @@
         stack-updated (pop stack)]
     (swap! state assoc :stack stack-updated)
     (swap! state assoc :program-counter top)))
+
+(defn ld-Vx-Vy
+  "8xy0 - LD Vx, Vy
+  Set Vx = Vy."
+  [state Vx Vy]
+  (let [registers (:registers @state)
+        Vy-value (nth registers Vy)
+        updated-registers (assoc registers Vx Vy-value)]
+    (swap! state assoc :registers updated-registers)))
