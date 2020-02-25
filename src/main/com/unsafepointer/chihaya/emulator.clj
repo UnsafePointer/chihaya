@@ -55,6 +55,7 @@
       [\8 _ _\3] (instructions/xor-Vx-Vy state Vx Vy)
       [\8 _ _\4] (instructions/add-Vx-Vy state Vx Vy)
       [\8 _ _\5] (instructions/sub-Vx-Vy state Vx Vy)
+      [\8 _ _\E] (instructions/shl-Vx state Vx)
       [\9 _ _\0] (instructions/sne-Vx-Vy state Vx Vy)
       [\A _ _ _] (instructions/ld-I-addr state nnn)
       [\D _ _ _] (instructions/drw-Vx-Vy-nibble state Vx Vy nibble)

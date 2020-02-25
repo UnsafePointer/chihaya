@@ -192,3 +192,16 @@
         updated-registers (atom (assoc registers Vx result))]
     (swap! updated-registers assoc 0xF not-borrow)
     (swap! state assoc :registers @updated-registers)))
+
+(defn shl-Vx
+  "8xyE - SHL Vx {, Vy}
+  Set Vx = Vx SHL 1."
+  [state Vx]
+  (let [registers (:registers @state)
+        Vx-value (nth registers Vx)
+        test (if (bit-test Vx-value 7) 1 0)
+        intermediate-result (bit-shift-left Vx-value 1)
+        result (bit-and intermediate-result 0xFF)
+        updated-registers (atom (assoc registers Vx result))]
+    (swap! updated-registers assoc 0xF test)
+    (swap! state assoc :registers @updated-registers)))
