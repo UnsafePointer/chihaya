@@ -131,3 +131,14 @@
         Vy-value (nth registers Vy)
         updated-registers (assoc registers Vx Vy-value)]
     (swap! state assoc :registers updated-registers)))
+
+(defn or-Vx-Vy
+  "8xy1 - OR Vx, Vy
+  Set Vx = Vx OR Vy."
+  [state Vx Vy]
+  (let [registers (:registers @state)
+        Vx-value (nth registers Vx)
+        Vy-value (nth registers Vy)
+        result (bit-or Vx-value Vy-value)
+        updated-registers (assoc registers Vx result)]
+    (swap! state assoc :registers updated-registers)))
