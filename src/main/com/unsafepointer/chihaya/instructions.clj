@@ -205,3 +205,16 @@
         updated-registers (atom (assoc registers Vx result))]
     (swap! updated-registers assoc 0xF test)
     (swap! state assoc :registers @updated-registers)))
+
+(defn shr-Vx
+  "8xy6 - SHR Vx {, Vy}
+  Set Vx = Vx SHR 1."
+  [state Vx]
+  (let [registers (:registers @state)
+        Vx-value (nth registers Vx)
+        test (if (bit-test Vx-value 0) 1 0)
+        intermediate-result (bit-shift-right Vx-value 1)
+        result (bit-and intermediate-result 0xFF)
+        updated-registers (atom (assoc registers Vx result))]
+    (swap! updated-registers assoc 0xF test)
+    (swap! state assoc :registers @updated-registers)))
