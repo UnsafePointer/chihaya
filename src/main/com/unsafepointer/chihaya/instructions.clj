@@ -164,3 +164,17 @@
         result (bit-xor Vx-value Vy-value)
         updated-registers (assoc registers Vx result)]
     (swap! state assoc :registers updated-registers)))
+
+(defn add-Vx-Vy
+  "8xy4 - ADD Vx, Vy
+  Set Vx = Vx + Vy, set VF = carry."
+  [state Vx Vy]
+  (let [registers (:registers @state)
+        Vx-value (nth registers Vx)
+        Vy-value (nth registers Vy)
+        intermediate-result (+ Vx-value Vy-value)
+        carry (if (> intermediate-result 0xFF) 0x1 0x0)
+        result (bit-and intermediate-result 0xFF)
+        updated-registers (atom (assoc registers Vx result))]
+    (swap! updated-registers assoc 0xF carry)
+    (swap! state assoc :registers @updated-registers)))
