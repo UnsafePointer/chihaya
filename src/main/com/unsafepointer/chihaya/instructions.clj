@@ -153,3 +153,14 @@
         result (bit-and Vx-value Vy-value)
         updated-registers (assoc registers Vx result)]
     (swap! state assoc :registers updated-registers)))
+
+(defn xor-Vx-Vy
+  "8xy3 - XOR Vx, Vy
+  Set Vx = Vx XOR Vy."
+  [state Vx Vy]
+  (let [registers (:registers @state)
+        Vx-value (nth registers Vx)
+        Vy-value (nth registers Vy)
+        result (bit-xor Vx-value Vy-value)
+        updated-registers (assoc registers Vx result)]
+    (swap! state assoc :registers updated-registers)))
