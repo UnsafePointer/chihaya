@@ -218,3 +218,18 @@
         updated-registers (atom (assoc registers Vx result))]
     (swap! updated-registers assoc 0xF test)
     (swap! state assoc :registers @updated-registers)))
+
+(defn ld-I-Vx
+  "Fx55 - LD [I], Vx
+  Store registers V0 through Vx in memory starting at location I."
+  [state Vx]
+  (let [registers (:registers @state)
+        address-register (:address-register @state)
+        updated-memory (atom (:memory @state))]
+    (loop [index 0]
+      (when (<= index Vx)
+        (let [address (+ address-register index)
+              value (nth registers index)]
+          (swap! updated-memory assoc address value)
+          (recur (inc index)))))
+    (swap! state assoc :memory @updated-memory)))

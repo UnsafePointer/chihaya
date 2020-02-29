@@ -60,6 +60,7 @@
       [\9 _ _\0] (instructions/sne-Vx-Vy state Vx Vy)
       [\A _ _ _] (instructions/ld-I-addr state nnn)
       [\D _ _ _] (instructions/drw-Vx-Vy-nibble state Vx Vy nibble)
+      [\F _\5\5] (instructions/ld-I-Vx state Vx)
       :else (throw (Exception. (str "Unhandled operation code: " opcode))))))
 
 (defn start-emulation [file-path]
