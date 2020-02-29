@@ -233,3 +233,18 @@
           (swap! updated-memory assoc address value)
           (recur (inc index)))))
     (swap! state assoc :memory @updated-memory)))
+
+(defn ld-Vx-I
+  "Fx65 - LD Vx, [I]
+  Read registers V0 through Vx from memory starting at location I."
+  [state Vx]
+  (let [memory (:memory @state)
+        address-register (:address-register @state)
+        updated-registers (atom (:registers @state))]
+    (loop [index 0]
+      (when (<= index Vx)
+        (let [address (+ address-register index)
+              value (nth memory address)]
+          (swap! updated-registers assoc index value)
+          (recur (inc index)))))
+    (swap! state assoc :registers @updated-registers)))
