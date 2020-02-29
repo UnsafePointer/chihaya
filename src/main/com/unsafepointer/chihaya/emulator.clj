@@ -8,7 +8,7 @@
 (defn read-rom [file-path]
   (IOUtils/toByteArray (io/input-stream file-path)))
 
-(defn create-initial-state [file-path]
+(defn create-initial-state [file-path print-instructions]
   (let [bytes (read-rom file-path)
         rom (map #(Byte/toUnsignedInt %) bytes)
         memory (vec (concat (vec (repeat 0x200 0)) ; 0x000 to 0x1FF is reserved for the interpreter
@@ -21,7 +21,8 @@
                      :stack ()
                      :registers (vec (repeat 16 0))
                      :address-register nil
-                     :screen screen})]
+                     :screen screen
+                     :print-instructions print-instructions})]
     state))
 
 (defn read-current-instruction [state]
@@ -40,6 +41,8 @@
         Vy (Integer/parseInt (str Vy-character) 16)
         kk (bit-and instruction 0xFF)
         nibble (bit-and instruction 0xF)]
+    (when (:print-instructions @state)
+      (println (str "PC: " (:program-counter @state) " OPCODE: " opcode)))
     (match opcode
       [\0\0\E\E] (instructions/ret state)
       [\1 _ _ _] (instructions/jp-addr state nnn)
@@ -65,8 +68,8 @@
       [\F _\6\5] (instructions/ld-Vx-I state Vx)
       :else (throw (Exception. (str "Unhandled operation code: " opcode))))))
 
-(defn start-emulation [file-path _]
-  (let [state (create-initial-state file-path)]
+(defn start-emulation [file-path print-instructions]
+  (let [state (create-initial-state file-path print-instructions)]
     (while true
       (read-current-instruction state)
       (execute-next-instruction state))))
