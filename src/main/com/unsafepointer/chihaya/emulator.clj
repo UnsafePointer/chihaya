@@ -60,6 +60,7 @@
       [\9 _ _\0] (instructions/sne-Vx-Vy state Vx Vy)
       [\A _ _ _] (instructions/ld-I-addr state nnn)
       [\D _ _ _] (instructions/drw-Vx-Vy-nibble state Vx Vy nibble)
+      [\F _\3\3] (instructions/ld-B-Vx state Vx)
       [\F _\5\5] (instructions/ld-I-Vx state Vx)
       [\F _\6\5] (instructions/ld-Vx-I state Vx)
       :else (throw (Exception. (str "Unhandled operation code: " opcode))))))

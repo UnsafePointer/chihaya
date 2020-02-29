@@ -1,6 +1,7 @@
 (ns com.unsafepointer.chihaya.instructions
   (:require [com.unsafepointer.chihaya.bitwise :as bitwise]
-            [com.unsafepointer.chihaya.screen :as screen]))
+            [com.unsafepointer.chihaya.screen :as screen]
+            [com.unsafepointer.chihaya.binary-coded-decimal :as bcd]))
 
 (defn jp-addr
   "1nnn - JP addr
@@ -248,3 +249,16 @@
           (swap! updated-registers assoc index value)
           (recur (inc index)))))
     (swap! state assoc :registers @updated-registers)))
+
+(defn ld-B-Vx
+  "Fx33 - LD B, Vx
+  Store BCD representation of Vx in memory locations I, I+1, and I+2."
+  [state Vx]
+  (let [registers (:registers @state)
+        Vx-value (nth registers Vx)
+        address-register (:address-register @state)
+        bcd-sequence (bcd/bcd-seq Vx-value)
+        updated-memory (atom (:memory @state))]
+    (doseq [[index digit] (map-indexed vector bcd-sequence)]
+      (swap! updated-memory assoc (+ address-register index) digit))
+    (swap! state assoc :memory @updated-memory)))
