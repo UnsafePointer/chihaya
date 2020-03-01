@@ -1,8 +1,14 @@
 (ns com.unsafepointer.chihaya.screen
   (:require [clojure.string :as string]))
 
+(def width 64)
+
+(def height 32)
+
+(def scale 10)
+
 (defn create-empty-screen []
-  (vec (take 64 (repeat (vec (repeat 32 0)))))) ; 64x32-pixel monochrome display
+  (vec (take width (repeat (vec (repeat height 0)))))) ; 64x32-pixel monochrome display
 
 (defn update-screen [screen x y bit]
   (let [row (nth screen x)

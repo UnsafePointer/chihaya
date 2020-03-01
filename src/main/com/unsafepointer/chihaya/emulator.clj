@@ -67,9 +67,3 @@
       [\F _\5\5] (instructions/ld-I-Vx state Vx)
       [\F _\6\5] (instructions/ld-Vx-I state Vx)
       :else (throw (Exception. (str "Unhandled operation code: " opcode))))))
-
-(defn start-emulation [file-path print-instructions]
-  (let [state (create-initial-state file-path print-instructions)]
-    (while true
-      (read-current-instruction state)
-      (execute-next-instruction state))))
