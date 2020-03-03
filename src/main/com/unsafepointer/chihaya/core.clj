@@ -41,7 +41,7 @@
   state)
 
 (defn draw-state [state]
-  (q/background 240)
+  (q/background 37 43 37)
   (let [cell-width (quot (q/width) screen/width)
         cell-height (quot (q/height) screen/height)
         screen (:screen @state)]
@@ -51,7 +51,7 @@
           (when (< y screen/height)
             (let [value (screen/get-screen-pixel-value screen x y)]
               (q/fill
-                (if (= 1 value) 0 255))
+                (if (= 1 value) [132 208 125] [37 43 37]))
                 (q/rect (* x cell-width) (* y cell-height) cell-width cell-height))
             (recur (inc y))))
         (recur (inc x))))))
