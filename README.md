@@ -8,6 +8,14 @@
 
 A CHIP-8 emulator written in Clojure.
 
+### Progress
+
+- [ ] CPU
+- [x] Display
+- [ ] Input
+- [ ] Sound
+- [ ] Timers
+
 ### Building
 
 #### Prerequisites
