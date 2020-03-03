@@ -1,5 +1,7 @@
 # Chihaya (千早)
 
+![images/cover.png](images/cover.png)
+
 > “If I can be the best in the world at something, then I think it's worth a shot.” - Chihaya Ayase
 >
 > [Chihayafuru, by Yuki Suetsugu](https://en.wikipedia.org/wiki/Chihayafuru)
