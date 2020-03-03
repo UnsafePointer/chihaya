@@ -32,6 +32,10 @@ Usage: chihaya [OPTION] ... <romfile>
   -h, --help
 ```
 
+#### CPU frequency
+
+Chip-8 has no formally defined processor speed at all. Chihaya renderer is locked at 60 Hz, running whatever number of instructions have been defined using the `--frequency` flag, which defaults to 800 Hz. Most games do best when you are running around 400-800Hz, but you have to check documentation per game.
+
 #### CPU Tests
 
 [corax89/chip8-test-rom](https://github.com/corax89/chip8-test-rom): test_opcode.ch8 (SHA1: f1cfcffe1937ed6dd6eeed1a7f85dfc777bda700)
