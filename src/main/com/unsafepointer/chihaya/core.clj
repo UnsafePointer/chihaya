@@ -7,10 +7,16 @@
   (:require [quil.core :as q])
   (:require [quil.middleware :as m]))
 
+(def frame-rate 60)
+
 (def cli-options
   [["-i" "--instructions" "Output instructions to stdout"
     :id :print-instructions
     :default false]
+   ["-f" "--frequency FREQ" "CPU clock rate"
+    :id :cpu-clock-rate
+    :parse-fn #(Integer/parseInt %)
+    :default 800]
    ["-h" "--help"]])
 
 (defn print-usage [summary]
@@ -23,14 +29,15 @@
     (and file-exists file-not-directory)))
 
 (defn setup [file-path print-instructions]
-  (q/frame-rate 60)
+  (q/frame-rate frame-rate)
   (q/color-mode :rgb)
   (q/no-stroke)
   (emulator/create-initial-state file-path print-instructions))
 
-(defn update-state [state]
-  (emulator/read-current-instruction state)
-  (emulator/execute-next-instruction state)
+(defn update-state [cpu-clock-rate state]
+  (dotimes [_ (quot cpu-clock-rate frame-rate)]
+    (emulator/read-current-instruction state)
+    (emulator/execute-next-instruction state))
   state)
 
 (defn draw-state [state]
@@ -64,13 +71,14 @@
             file-path-is-valid (validate-arg file-path)]
         (if-not file-path-is-valid
           (print-usage summary)
-          (let [print-instructions (:print-instructions options)]
+          (let [print-instructions (:print-instructions options)
+                cpu-clock-rate (:cpu-clock-rate options)]
             (q/defsketch chihaya
               :host "host"
               :title "千早"
               :size [(* screen/width screen/scale) (* screen/height screen/scale)]
               :setup (partial setup file-path print-instructions)
-              :update update-state
+              :update (partial update-state cpu-clock-rate)
               :draw draw-state
               :middleware [m/fun-mode]
               :on-close on-close)))))))
