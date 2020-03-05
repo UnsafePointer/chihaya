@@ -91,7 +91,7 @@
   (let [registers (:registers @state)
         Vx-value (nth registers Vx)
         result (bit-and (+ Vx-value byte) 0xFF)
-        registers-updated (assoc registers Vx byte)]
+        registers-updated (assoc registers Vx result)]
     (swap! state assoc :registers registers-updated)))
 
 (defn sne-Vx-Vy
