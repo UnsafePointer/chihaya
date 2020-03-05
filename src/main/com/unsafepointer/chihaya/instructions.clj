@@ -262,3 +262,15 @@
     (doseq [[index digit] (map-indexed vector bcd-sequence)]
       (swap! updated-memory assoc (+ address-register index) digit))
     (swap! state assoc :memory @updated-memory)))
+
+(defn add-I-Vx
+  "Fx1E - ADD I, Vx
+  Set I = I + Vx."
+  [state Vx]
+  (let [registers (:registers @state)
+        Vx-value (nth registers Vx)
+        memory (:memory @state)
+        address-register (:address-register @state)
+        address-register-value (nth memory address-register)
+        result (bit-and (+ Vx-value address-register-value) 0xFFFF)]
+    (swap! state assoc :address-register result)))
