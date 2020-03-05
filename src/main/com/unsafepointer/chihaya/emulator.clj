@@ -44,6 +44,7 @@
     (when (:print-instructions @state)
       (println (str "PC: " (:program-counter @state) " OPCODE: " opcode)))
     (match opcode
+      [\0\0\E\0] (instructions/cls state)
       [\0\0\E\E] (instructions/ret state)
       [\1 _ _ _] (instructions/jp-addr state nnn)
       [\2 _ _ _] (instructions/call-addr state nnn)

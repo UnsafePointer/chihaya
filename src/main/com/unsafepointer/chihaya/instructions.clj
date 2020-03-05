@@ -274,3 +274,10 @@
         address-register-value (nth memory address-register)
         result (bit-and (+ Vx-value address-register-value) 0xFFFF)]
     (swap! state assoc :address-register result)))
+
+(defn cls
+  "00E0 - CLS
+  Clear the display."
+  [state]
+  (let [empty-screen (screen/create-empty-screen)]
+    (swap! state assoc :screen empty-screen)))
