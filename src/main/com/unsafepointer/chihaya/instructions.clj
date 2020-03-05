@@ -281,3 +281,15 @@
   [state]
   (let [empty-screen (screen/create-empty-screen)]
     (swap! state assoc :screen empty-screen)))
+
+(defn skp-Vx
+  "Ex9E - SKP Vx
+  Skip next instruction if key with the value of Vx is pressed."
+  [state Vx]
+  (let [registers (:registers @state)
+        Vx-value (nth registers Vx)
+        keyboard (:keyboard @state)
+        pressed (nth keyboard Vx-value)]
+    (when pressed
+      (let [program-counter (:program-counter @state)]
+        (swap! state assoc :program-counter (+ program-counter 2))))))
