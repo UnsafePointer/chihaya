@@ -4,6 +4,7 @@
   (:require [clojure.tools.cli :refer [parse-opts]])
   (:require [com.unsafepointer.chihaya.emulator :as emulator])
   (:require [com.unsafepointer.chihaya.screen :as screen])
+  (:require [com.unsafepointer.chihaya.keyboard :as keyboard])
   (:require [quil.core :as q])
   (:require [quil.middleware :as m]))
 
@@ -59,6 +60,14 @@
 (defn on-close [state]
   (System/exit 0))
 
+(defn key-pressed [state key]
+  (keyboard/update-keyboard state (:key key) true)
+  state)
+
+(defn key-released [state key]
+  (keyboard/update-keyboard state (:key key) false)
+  state)
+
 (defn -main [& args]
   (let [parsed-options (parse-opts args cli-options)
         errors (:errors parsed-options)
@@ -80,5 +89,7 @@
               :setup (partial setup file-path print-instructions)
               :update (partial update-state cpu-clock-rate)
               :draw draw-state
+              :key-pressed key-pressed
+              :key-released key-released
               :middleware [m/fun-mode]
               :on-close on-close)))))))

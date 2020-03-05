@@ -22,7 +22,8 @@
                      :registers (vec (repeat 16 0))
                      :address-register nil
                      :screen screen
-                     :print-instructions print-instructions})]
+                     :print-instructions print-instructions
+                     :keyboard (vec (repeat 16 false))})]
     state))
 
 (defn read-current-instruction [state]
