@@ -21,10 +21,16 @@
                      :stack ()
                      :registers (vec (repeat 16 0))
                      :address-register nil
+                     :delay-timer-register 0
                      :screen screen
                      :print-instructions print-instructions
                      :keyboard (vec (repeat 16 false))})]
     state))
+
+(defn update-delay-timer-register [state]
+  (let [delay-timer-register (:delay-timer-register @state)]
+    (when (> delay-timer-register 0)
+      (swap! state assoc :delay-timer-register (- delay-timer-register 1)))))
 
 (defn read-current-instruction [state]
   (let [program-counter (:program-counter @state)

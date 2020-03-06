@@ -39,6 +39,7 @@
   (dotimes [_ (quot cpu-clock-rate frame-rate)]
     (emulator/read-current-instruction state)
     (emulator/execute-next-instruction state))
+  (emulator/update-delay-timer-register state)
   state)
 
 (defn draw-state [state]
