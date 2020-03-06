@@ -301,3 +301,12 @@
   (let [registers (:registers @state)
         Vx-value (nth registers Vx)]
     (swap! state assoc :delay-timer-register Vx-value)))
+
+(defn ld-Vx-DT
+  "Fx07 - LD Vx, DT
+  Set Vx = delay timer value."
+  [state Vx]
+  (let [registers (:registers @state)
+        DT (:delay-timer-register @state)
+        updated-registers (assoc registers Vx DT)]
+    (swap! state assoc :registers updated-registers)))
