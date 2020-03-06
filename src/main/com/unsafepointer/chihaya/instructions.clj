@@ -310,3 +310,15 @@
         DT (:delay-timer-register @state)
         updated-registers (assoc registers Vx DT)]
     (swap! state assoc :registers updated-registers)))
+
+(defn sknp-Vx
+  "ExA1 - SKNP Vx
+  Skip next instruction if key with the value of Vx is not pressed."
+  [state Vx]
+  (let [registers (:registers @state)
+        Vx-value (nth registers Vx)
+        keyboard (:keyboard @state)
+        pressed (nth keyboard Vx-value)]
+    (when (not pressed)
+      (let [program-counter (:program-counter @state)]
+        (swap! state assoc :program-counter (+ program-counter 2))))))
