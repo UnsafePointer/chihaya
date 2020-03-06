@@ -293,3 +293,11 @@
     (when pressed
       (let [program-counter (:program-counter @state)]
         (swap! state assoc :program-counter (+ program-counter 2))))))
+
+(defn ld-DT-Vx
+  "Fx15 - LD DT, Vx
+  Set delay timer = Vx."
+  [state Vx]
+  (let [registers (:registers @state)
+        Vx-value (nth registers Vx)]
+    (swap! state assoc :delay-timer-register Vx-value)))
