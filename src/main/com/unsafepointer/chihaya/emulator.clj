@@ -81,6 +81,7 @@
       [\E _\A\1] (instructions/sknp-Vx state Vx)
       [\F _\0\7] (instructions/ld-Vx-DT state Vx)
       [\F _\1\5] (instructions/ld-DT-Vx state Vx)
+      [\F _\1\8] (instructions/ld-ST-Vx state Vx)
       [\F _\1\E] (instructions/add-I-Vx state Vx)
       [\F _\3\3] (instructions/ld-B-Vx state Vx)
       [\F _\5\5] (instructions/ld-I-Vx state Vx)

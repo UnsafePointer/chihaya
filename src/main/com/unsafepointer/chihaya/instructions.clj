@@ -322,3 +322,11 @@
     (when (not pressed)
       (let [program-counter (:program-counter @state)]
         (swap! state assoc :program-counter (+ program-counter 2))))))
+
+(defn ld-ST-Vx
+  "Fx18 - LD ST, Vx
+  Set sound timer = Vx."
+  [state Vx]
+  (let [registers (:registers @state)
+        Vx-value (nth registers Vx)]
+    (swap! state assoc :sound-timer-register Vx-value)))
