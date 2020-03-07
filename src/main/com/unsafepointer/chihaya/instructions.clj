@@ -330,3 +330,12 @@
   (let [registers (:registers @state)
         Vx-value (nth registers Vx)]
     (swap! state assoc :sound-timer-register Vx-value)))
+
+(defn ld-F-Vx
+  "Fx29 - LD F, Vx
+  Set I = location of sprite for digit Vx."
+  [state Vx]
+  (let [registers (:registers @state)
+        Vx-value (nth registers Vx)
+        address (* 5 Vx-value)]
+    (swap! state assoc :address-register address)))
