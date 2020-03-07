@@ -21,9 +21,22 @@
                      :stack ()
                      :registers (vec (repeat 16 0))
                      :address-register nil
+                     :delay-timer-register 0
+                     :sound-timer-register 0
                      :screen screen
-                     :print-instructions print-instructions})]
+                     :print-instructions print-instructions
+                     :keyboard (vec (repeat 16 false))})]
     state))
+
+(defn update-delay-timer-register [state]
+  (let [delay-timer-register (:delay-timer-register @state)]
+    (when (> delay-timer-register 0)
+      (swap! state assoc :delay-timer-register (- delay-timer-register 1)))))
+
+(defn update-sound-timer-register [state]
+  (let [sound-timer-register (:sound-timer-register @state)]
+    (when (> sound-timer-register 0) ; TODO: As long as ST's value is greater than zero, the Chip-8 buzzer will sound.
+      (swap! state assoc :sound-timer-register (- sound-timer-register 1)))))
 
 (defn read-current-instruction [state]
   (let [program-counter (:program-counter @state)
@@ -44,6 +57,7 @@
     (when (:print-instructions @state)
       (println (str "PC: " (:program-counter @state) " OPCODE: " opcode)))
     (match opcode
+      [\0\0\E\0] (instructions/cls state)
       [\0\0\E\E] (instructions/ret state)
       [\1 _ _ _] (instructions/jp-addr state nnn)
       [\2 _ _ _] (instructions/call-addr state nnn)
@@ -63,6 +77,12 @@
       [\9 _ _\0] (instructions/sne-Vx-Vy state Vx Vy)
       [\A _ _ _] (instructions/ld-I-addr state nnn)
       [\D _ _ _] (instructions/drw-Vx-Vy-nibble state Vx Vy nibble)
+      [\E _\9\E] (instructions/skp-Vx state Vx)
+      [\E _\A\1] (instructions/sknp-Vx state Vx)
+      [\F _\0\7] (instructions/ld-Vx-DT state Vx)
+      [\F _\1\5] (instructions/ld-DT-Vx state Vx)
+      [\F _\1\8] (instructions/ld-ST-Vx state Vx)
+      [\F _\1\E] (instructions/add-I-Vx state Vx)
       [\F _\3\3] (instructions/ld-B-Vx state Vx)
       [\F _\5\5] (instructions/ld-I-Vx state Vx)
       [\F _\6\5] (instructions/ld-Vx-I state Vx)

@@ -262,3 +262,71 @@
     (doseq [[index digit] (map-indexed vector bcd-sequence)]
       (swap! updated-memory assoc (+ address-register index) digit))
     (swap! state assoc :memory @updated-memory)))
+
+(defn add-I-Vx
+  "Fx1E - ADD I, Vx
+  Set I = I + Vx."
+  [state Vx]
+  (let [registers (:registers @state)
+        Vx-value (nth registers Vx)
+        memory (:memory @state)
+        address-register (:address-register @state)
+        address-register-value (nth memory address-register)
+        result (bit-and (+ Vx-value address-register-value) 0xFFFF)]
+    (swap! state assoc :address-register result)))
+
+(defn cls
+  "00E0 - CLS
+  Clear the display."
+  [state]
+  (let [empty-screen (screen/create-empty-screen)]
+    (swap! state assoc :screen empty-screen)))
+
+(defn skp-Vx
+  "Ex9E - SKP Vx
+  Skip next instruction if key with the value of Vx is pressed."
+  [state Vx]
+  (let [registers (:registers @state)
+        Vx-value (nth registers Vx)
+        keyboard (:keyboard @state)
+        pressed (nth keyboard Vx-value)]
+    (when pressed
+      (let [program-counter (:program-counter @state)]
+        (swap! state assoc :program-counter (+ program-counter 2))))))
+
+(defn ld-DT-Vx
+  "Fx15 - LD DT, Vx
+  Set delay timer = Vx."
+  [state Vx]
+  (let [registers (:registers @state)
+        Vx-value (nth registers Vx)]
+    (swap! state assoc :delay-timer-register Vx-value)))
+
+(defn ld-Vx-DT
+  "Fx07 - LD Vx, DT
+  Set Vx = delay timer value."
+  [state Vx]
+  (let [registers (:registers @state)
+        DT (:delay-timer-register @state)
+        updated-registers (assoc registers Vx DT)]
+    (swap! state assoc :registers updated-registers)))
+
+(defn sknp-Vx
+  "ExA1 - SKNP Vx
+  Skip next instruction if key with the value of Vx is not pressed."
+  [state Vx]
+  (let [registers (:registers @state)
+        Vx-value (nth registers Vx)
+        keyboard (:keyboard @state)
+        pressed (nth keyboard Vx-value)]
+    (when (not pressed)
+      (let [program-counter (:program-counter @state)]
+        (swap! state assoc :program-counter (+ program-counter 2))))))
+
+(defn ld-ST-Vx
+  "Fx18 - LD ST, Vx
+  Set sound timer = Vx."
+  [state Vx]
+  (let [registers (:registers @state)
+        Vx-value (nth registers Vx)]
+    (swap! state assoc :sound-timer-register Vx-value)))
