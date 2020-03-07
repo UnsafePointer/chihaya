@@ -79,6 +79,7 @@
       [\8 _ _\E] (instructions/shl-Vx state Vx)
       [\9 _ _\0] (instructions/sne-Vx-Vy state Vx Vy)
       [\A _ _ _] (instructions/ld-I-addr state nnn)
+      [\C _ _ _] (instructions/rnd-Vx-kk state Vx kk)
       [\D _ _ _] (instructions/drw-Vx-Vy-nibble state Vx Vy nibble)
       [\E _\9\E] (instructions/skp-Vx state Vx)
       [\E _\A\1] (instructions/sknp-Vx state Vx)

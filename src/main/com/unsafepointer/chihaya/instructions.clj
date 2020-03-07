@@ -339,3 +339,13 @@
         Vx-value (nth registers Vx)
         address (* 5 Vx-value)]
     (swap! state assoc :address-register address)))
+
+(defn rnd-Vx-kk
+  "Cxkk - RND Vx, byte
+  Set Vx = random byte AND kk"
+  [state Vx kk]
+  (let [random (rand-int 0xFF)
+        value (bit-and random kk)
+        registers (:registers @state)
+        updated-registers (assoc registers Vx value)]
+    (swap! state assoc :registers updated-registers)))
