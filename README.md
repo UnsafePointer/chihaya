@@ -22,6 +22,7 @@ A CHIP-8 emulator written in Clojure.
 
 - [JDK 8](https://www.oracle.com/java/technologies/javase-jdk8-downloads.html)
 - [Clojure](https://clojure.org/guides/getting_started)
+- [Chip-8 font](http://devernay.free.fr/hacks/chip8/C8TECH10.HTM#font): follow instructions [here](font/README.md).
 
 #### Compiling
 

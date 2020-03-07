@@ -8,10 +8,13 @@
 (defn read-rom [file-path]
   (IOUtils/toByteArray (io/input-stream file-path)))
 
-(defn create-initial-state [file-path print-instructions]
-  (let [bytes (read-rom file-path)
-        rom (map #(Byte/toUnsignedInt %) bytes)
-        memory (vec (concat (vec (repeat 0x200 0)) ; 0x000 to 0x1FF is reserved for the interpreter
+(defn create-initial-state [file-path print-instructions font-resource]
+  (let [rom-bytes (read-rom file-path)
+        rom (map #(Byte/toUnsignedInt %) rom-bytes)
+        font-bytes (read-rom font-resource)
+        font (map #(Byte/toUnsignedInt %) font-bytes)
+        memory (vec (concat (seq font) ; Chip-8 font starts at 0x000
+                            (vec (repeat (- 0x200 (count font)) 0)) ; 0x000 to 0x1FF is reserved for the interpreter
                             (seq rom) ; 0x200 is the start of most Chip-8 programs
                             (vec (repeat (- 0xFFF (count rom) 0x200) 0)))) ; 0xFFF is the end of Chip-8 RAM
         screen (screen/create-empty-screen)

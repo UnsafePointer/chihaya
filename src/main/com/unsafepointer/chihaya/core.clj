@@ -29,11 +29,11 @@
         file-not-directory (not (.isDirectory (io/file file-path)))]
     (and file-exists file-not-directory)))
 
-(defn setup [file-path print-instructions]
+(defn setup [file-path print-instructions font-resource]
   (q/frame-rate frame-rate)
   (q/color-mode :rgb)
   (q/no-stroke)
-  (emulator/create-initial-state file-path print-instructions))
+  (emulator/create-initial-state file-path print-instructions font-resource))
 
 (defn update-state [cpu-clock-rate state]
   (dotimes [_ (quot cpu-clock-rate frame-rate)]
@@ -82,16 +82,19 @@
             file-path-is-valid (validate-arg file-path)]
         (if-not file-path-is-valid
           (print-usage summary)
-          (let [print-instructions (:print-instructions options)
-                cpu-clock-rate (:cpu-clock-rate options)]
-            (q/defsketch chihaya
-              :host "host"
-              :title "千早"
-              :size [(* screen/width screen/scale) (* screen/height screen/scale)]
-              :setup (partial setup file-path print-instructions)
-              :update (partial update-state cpu-clock-rate)
-              :draw draw-state
-              :key-pressed key-pressed
-              :key-released key-released
-              :middleware [m/fun-mode]
-              :on-close on-close)))))))
+          (let [font-resource (io/resource "font.ch8")]
+            (if (nil? font-resource)
+              (println "Could not find font.ch8 in resource. See README.md.")
+              (let [print-instructions (:print-instructions options)
+                    cpu-clock-rate (:cpu-clock-rate options)]
+                (q/defsketch chihaya
+                  :host "host"
+                  :title "千早"
+                  :size [(* screen/width screen/scale) (* screen/height screen/scale)]
+                  :setup (partial setup file-path print-instructions font-resource)
+                  :update (partial update-state cpu-clock-rate)
+                  :draw draw-state
+                  :key-pressed key-pressed
+                  :key-released key-released
+                  :middleware [m/fun-mode]
+                  :on-close on-close)))))))))
