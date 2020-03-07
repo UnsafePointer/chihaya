@@ -22,6 +22,7 @@
                      :registers (vec (repeat 16 0))
                      :address-register nil
                      :delay-timer-register 0
+                     :sound-timer-register 0
                      :screen screen
                      :print-instructions print-instructions
                      :keyboard (vec (repeat 16 false))})]
@@ -31,6 +32,11 @@
   (let [delay-timer-register (:delay-timer-register @state)]
     (when (> delay-timer-register 0)
       (swap! state assoc :delay-timer-register (- delay-timer-register 1)))))
+
+(defn update-sound-timer-register [state]
+  (let [sound-timer-register (:sound-timer-register @state)]
+    (when (> sound-timer-register 0) ; TODO: As long as ST's value is greater than zero, the Chip-8 buzzer will sound.
+      (swap! state assoc :sound-timer-register (- sound-timer-register 1)))))
 
 (defn read-current-instruction [state]
   (let [program-counter (:program-counter @state)

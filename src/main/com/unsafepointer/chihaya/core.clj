@@ -40,6 +40,7 @@
     (emulator/read-current-instruction state)
     (emulator/execute-next-instruction state))
   (emulator/update-delay-timer-register state)
+  (emulator/update-sound-timer-register state)
   state)
 
 (defn draw-state [state]
