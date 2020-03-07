@@ -16,6 +16,14 @@ A CHIP-8 emulator written in Clojure.
 - [ ] Sound
 - [x] Timers
 
+#### Known issues:
+
+* Sound timer is implemented but the buzzer doesn't work.
+* CPU is missing the following instructions:
+  * SUBN Vx, Vy
+  * JP V0, addr
+  * LD Vx, K
+
 ### Building
 
 #### Prerequisites
@@ -32,6 +40,10 @@ $ clj -Auberjar
 ```
 
 #### Running
+
+Pong: (SHA1: a60611339661e3ab2d8af024ad1da5880a6f8665)
+
+![pong.gif](images/pong.gif)
 
 ```bash
 $ java -cp target/chihaya-0.1.0.jar clojure.main -m com.unsafepointer.chihaya.core
